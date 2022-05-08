@@ -1,5 +1,6 @@
 package com.xiangning.simplelauncher
 
+import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -13,7 +14,6 @@ import com.xiangning.simplelauncher.retrofit.RetrofitServiceFactory
 import com.xiangning.simplelauncher.retrofit.get
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.functions.Consumer
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_launcher.*
 import java.text.DecimalFormat
@@ -205,6 +205,7 @@ class Launcher : BaseActivity() {
         } + " ${if (hour > 12) hour - 12 else hour}:" + decimalFormat.format(minutes)
     }
 
+    @SuppressLint("SetTextI18n")
     private fun updateDate(calendar: Calendar) {
         // 公历
         date?.text = dateFormat.format(calendar.timeInMillis) +
@@ -215,16 +216,19 @@ class Launcher : BaseActivity() {
         yiji?.text = LunarCalendar.getyiji(calendar)
     }
 
+    // 请求天气信息2小时时间间隔
+    private val GET_WEATHER_INTERVAL = TimeUnit.HOURS.toMillis(2)
     private var mLastUpdateTime = 0L
+    @SuppressLint("CheckResult")
     private fun getWeather() {
-        if (System.currentTimeMillis() - mLastUpdateTime < 2 * 60 * 60 * 1000) {
+        if (System.currentTimeMillis() - mLastUpdateTime < GET_WEATHER_INTERVAL) {
             return
         }
 
         val response = RetrofitServiceFactory.dynamic.get("http://wthrcdn.etouch.cn/weather_mini?city=遂宁", WeatherResponse::class.java)
         response.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(Consumer { res ->
+            .subscribe({ res ->
                 if (res?.status == 1000) {
                     val sb = StringBuffer()
                     val data = res.data
@@ -241,7 +245,7 @@ class Launcher : BaseActivity() {
                     weather?.text = sb.toString()
                     mLastUpdateTime = System.currentTimeMillis()
                 }
-            }, Consumer{ e -> Log.e(TAG, "getWeather: " + e.message, e) })
+            }, { e -> Log.e(TAG, "getWeather: " + e.message, e) })
     }
 
     private fun extractTemp(raw: String) : String {
