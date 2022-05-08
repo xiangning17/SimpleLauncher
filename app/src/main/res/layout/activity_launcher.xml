@@ -74,10 +74,12 @@
             android:textSize="36sp"
             android:textStyle="bold" />
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/yiji"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:maxLines="2"
+            app:autoSizeTextType="uniform"
             android:gravity="center"
             android:text="宜忌"
             android:textColor="@android:color/white"
@@ -96,10 +98,12 @@
         android:gravity="center"
         android:orientation="horizontal">
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/weather"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:maxLines="2"
+            app:autoSizeTextType="uniform"
             android:text="晴转多云  23度"
             android:textColor="@android:color/white"
             android:textSize="36sp"
