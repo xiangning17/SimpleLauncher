@@ -1,6 +1,7 @@
 package com.xiangning.simplelauncher
 
 import android.app.Application
+import com.xiangning.simplelauncher.telephony.AudioControl
 import com.xiangning.simplelauncher.telephony.InCallManager
 
 /**
@@ -10,6 +11,9 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        // 初始化音频管理
+        AudioControl.init(this)
+        // 初始化电话监听
         InCallManager(this)
     }
 }

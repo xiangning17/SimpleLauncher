@@ -1,5 +1,6 @@
 package com.xiangning.simplelauncher.ui
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -9,7 +10,8 @@ import android.os.BatteryManager
 import android.os.Bundle
 import android.text.SpannableStringBuilder
 import android.util.Log
-import com.xiangning.simplelauncher.*
+import com.tbruyelle.rxpermissions2.RxPermissions
+import com.xiangning.simplelauncher.R
 import com.xiangning.simplelauncher.calendar.LunarCalendar
 import com.xiangning.simplelauncher.entity.WeatherResponse
 import com.xiangning.simplelauncher.notification.NotificationService
@@ -134,6 +136,11 @@ class Launcher : BaseActivity() {
         startTime()
         getWeather()
         registerReceiver(batteryReceiver, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
+
+        RxPermissions(this)
+            .request(Manifest.permission.READ_PHONE_STATE)
+            .subscribe()
+
         Log.d(TAG, "onStart")
     }
 

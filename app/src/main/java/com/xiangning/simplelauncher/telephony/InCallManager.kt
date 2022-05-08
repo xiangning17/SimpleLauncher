@@ -1,17 +1,29 @@
 package com.xiangning.simplelauncher.telephony
 
+import android.Manifest
 import android.content.Context
+import android.content.pm.PackageManager
+import android.telecom.TelecomManager
 import android.telephony.PhoneStateListener
 import android.telephony.TelephonyManager
 import android.util.Log
+import androidx.core.app.ActivityCompat
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import java.util.concurrent.TimeUnit
 
-class InCallManager(context: Context) {
+class InCallManager(private val context: Context) {
 
     private val TAG = "InCallManager"
 
     private val teleManager = context.applicationContext
         .getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
     private val listener = MyPhoneStateListener()
+
+    private val telecomManager by lazy { context.getSystemService(Context.TELECOM_SERVICE) as TelecomManager }
+
+    private var checkStateDisposable: Disposable? = null
 
     init {
         //注册电话状态监听器
@@ -30,26 +42,57 @@ class InCallManager(context: Context) {
                     // 挂机
                     Log.e(TAG, "onCallStateChanged: 挂机")
 
+                    checkStateDisposable?.dispose()
+                    checkStateDisposable = null
                 }
+
                 TelephonyManager.CALL_STATE_OFFHOOK -> {
-                    // 接听
                     Log.e(TAG, "onCallStateChanged: 摘机")
 
                     //  如果是去電則incomingNumber為""
                     // 【因为此处无法监听去电并且无法去电的电话号码，所以当去电时此处的打入电话号码为null或者""】
-                    if (incomingNumber.isEmpty()) {
-                        //打开扬声器
-                        Log.e(TAG, "onCallStateChanged: 来电")
-                    }
+                    val incoming = incomingNumber.isNotBlank()
+                    Log.e(TAG, "onCallStateChanged: ${if (incoming) "来电" else "去电"}")
+                    checkStateDisposable = Observable.interval(2, TimeUnit.SECONDS)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .doOnDispose { AudioControl.closeSpeaker() }
+                        .subscribe {
+                            ensureDialForeground()
+                            ensureSpeakerOn()
+                            ensureVolumeMax()
+                        }
 
                 }
                 TelephonyManager.CALL_STATE_RINGING -> {
                     // 响铃
                     Log.e(TAG, "onCallStateChanged: 响铃")
-
+                    AudioControl.setRingVolumeMax()
                 }
             }
         }
+    }
+
+    private fun ensureDialForeground() {
+        if (ActivityCompat.checkSelfPermission(
+                context,
+                Manifest.permission.READ_PHONE_STATE
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            Log.e(TAG, "ensureDialForeground: no permissions")
+            return
+        }
+
+        if (telecomManager.isInCall) {
+            telecomManager.showInCallScreen(true)
+        }
+    }
+
+    private fun ensureSpeakerOn() {
+        AudioControl.openSpeaker()
+    }
+
+    private fun ensureVolumeMax() {
+        AudioControl.setCallVolumeMax()
     }
 
     //此自动接听代码来自官方开源Demo http://code.google.com/p/auto-answer/source/detail?r=17 
