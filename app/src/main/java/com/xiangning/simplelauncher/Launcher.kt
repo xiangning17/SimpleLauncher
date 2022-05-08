@@ -209,7 +209,7 @@ class Launcher : BaseActivity() {
     private fun updateDate(calendar: Calendar) {
         // 公历
         date?.text = dateFormat.format(calendar.timeInMillis) +
-                " 星期" + weeks[calendar.get(Calendar.DAY_OF_WEEK) - 1]
+                "\n星期" + weeks[calendar.get(Calendar.DAY_OF_WEEK) - 1]
         // 计算农历
         tv_lunar?.text = LunarCalendar.getLunarString(calendar)
         // 宜忌
@@ -225,8 +225,8 @@ class Launcher : BaseActivity() {
             return
         }
 
-        val response = RetrofitServiceFactory.dynamic.get("http://wthrcdn.etouch.cn/weather_mini?city=遂宁", WeatherResponse::class.java)
-        response.subscribeOn(Schedulers.io())
+        RetrofitServiceFactory.dynamic.get("http://wthrcdn.etouch.cn/weather_mini?city=遂宁", WeatherResponse::class.java)
+            .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ res ->
                 if (res?.status == 1000) {
