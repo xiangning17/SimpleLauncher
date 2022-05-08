@@ -1,9 +1,8 @@
-package com.xiangning.simplelauncher
+package com.xiangning.simplelauncher.utils
 
 import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
-import android.view.View
 import java.lang.reflect.Method
 
 /**

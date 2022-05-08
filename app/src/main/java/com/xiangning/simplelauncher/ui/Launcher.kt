@@ -1,4 +1,4 @@
-package com.xiangning.simplelauncher
+package com.xiangning.simplelauncher.ui
 
 import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
@@ -9,9 +9,15 @@ import android.os.BatteryManager
 import android.os.Bundle
 import android.text.SpannableStringBuilder
 import android.util.Log
+import com.xiangning.simplelauncher.*
+import com.xiangning.simplelauncher.calendar.LunarCalendar
 import com.xiangning.simplelauncher.entity.WeatherResponse
+import com.xiangning.simplelauncher.notification.NotificationService
+import com.xiangning.simplelauncher.notification.PermissionProxyActivity
 import com.xiangning.simplelauncher.retrofit.RetrofitServiceFactory
 import com.xiangning.simplelauncher.retrofit.get
+import com.xiangning.simplelauncher.utils.ShellUtils
+import com.xiangning.simplelauncher.utils.StatusBarHelper
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers

@@ -1,4 +1,4 @@
-package com.xiangning.simplelauncher
+package com.xiangning.simplelauncher.notification
 
 import android.annotation.SuppressLint
 import android.service.notification.NotificationListenerService

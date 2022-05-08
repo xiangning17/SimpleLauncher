@@ -1,11 +1,12 @@
-package com.xiangning.simplelauncher
+package com.xiangning.simplelauncher.ui
 
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.provider.Settings
-import androidx.appcompat.app.AppCompatActivity
+import com.xiangning.simplelauncher.R
+import com.xiangning.simplelauncher.utils.ShellUtils
+import com.xiangning.simplelauncher.utils.StatusBarHelper
 import kotlinx.android.synthetic.main.settings_activity.*
 import kotlin.concurrent.thread
 
@@ -33,10 +34,16 @@ class SettingsActivity : BaseActivity() {
                 StatusBarHelper.disableStatusBar(this, isChecked)
                 if (isChecked) {
                     ShellUtils.execCommand("pm disable com.huawei.android.launcher/.Launcher", true)
-                    ShellUtils.execCommand("pm disable com.huawei.android.launcher/.simpleui.SimpleUILauncher", true)
+                    ShellUtils.execCommand(
+                        "pm disable com.huawei.android.launcher/.simpleui.SimpleUILauncher",
+                        true
+                    )
                 } else {
                     ShellUtils.execCommand("pm enable com.huawei.android.launcher/.Launcher", true)
-                    ShellUtils.execCommand("pm enable com.huawei.android.launcher/.simpleui.SimpleUILauncher", true)
+                    ShellUtils.execCommand(
+                        "pm enable com.huawei.android.launcher/.simpleui.SimpleUILauncher",
+                        true
+                    )
                 }
             }
         }

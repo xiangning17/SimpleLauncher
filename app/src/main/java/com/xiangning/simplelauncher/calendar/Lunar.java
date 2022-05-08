@@ -1,4 +1,4 @@
-package com.xiangning.simplelauncher;
+package com.xiangning.simplelauncher.calendar;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

@@ -1,4 +1,4 @@
-package com.xiangning.simplelauncher
+package com.xiangning.simplelauncher.entity
 
 import android.graphics.drawable.Drawable
 

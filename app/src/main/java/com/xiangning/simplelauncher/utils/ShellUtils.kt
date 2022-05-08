@@ -1,4 +1,4 @@
-package com.xiangning.simplelauncher
+package com.xiangning.simplelauncher.utils
 
 import java.io.BufferedReader
 import java.io.DataOutputStream

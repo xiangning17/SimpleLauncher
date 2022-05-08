@@ -6,12 +6,15 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.READ_CALL_LOG" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.STATUS_BAR" />
     <uses-permission android:name="android.permission.EXPAND_STATUS_BAR" />
 
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
 
     <application
+        android:name=".App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -20,11 +23,11 @@
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup">
         <activity
-            android:name=".PermissionProxyActivity"
+            android:name=".notification.PermissionProxyActivity"
             android:exported="false" />
 
         <service
-            android:name=".NotificationService"
+            android:name=".notification.NotificationService"
             android:exported="true"
             android:label="通知清除器"
             android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
@@ -34,18 +37,18 @@
         </service>
 
         <activity
-            android:name=".SettingsActivity"
+            android:name=".ui.SettingsActivity"
             android:excludeFromRecents="true"
             android:finishOnCloseSystemDialogs="true"
             android:label="@string/title_activity_settings"
             android:launchMode="singleTask" />
         <activity
-            android:name=".Contacts"
+            android:name=".ui.Contacts"
             android:excludeFromRecents="true"
             android:finishOnCloseSystemDialogs="true"
             android:launchMode="singleTask" />
         <activity
-            android:name=".Launcher"
+            android:name=".ui.Launcher"
             android:excludeFromRecents="true"
             android:launchMode="singleInstance">
             <intent-filter>

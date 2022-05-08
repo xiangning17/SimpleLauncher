@@ -1,4 +1,4 @@
-package com.xiangning.simplelauncher
+package com.xiangning.simplelauncher.ui
 
 import android.app.Activity
 import android.content.Context
@@ -10,13 +10,14 @@ import android.provider.ContactsContract
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.xiangning.sectionadapter.SectionAdapter
 import com.xiangning.sectionadapter.binder.SimpleItemBinder
+import com.xiangning.simplelauncher.entity.ContactItem
+import com.xiangning.simplelauncher.R
 import kotlinx.android.synthetic.main.activity_contacts.*
 
 

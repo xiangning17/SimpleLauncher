@@ -1,4 +1,4 @@
-package com.xiangning.simplelauncher
+package com.xiangning.simplelauncher.ui
 
 import android.view.KeyEvent
 import android.view.WindowManager
