@@ -18,9 +18,8 @@ import com.xiangning.simplelauncher.notification.NotificationService
 import com.xiangning.simplelauncher.notification.PermissionProxyActivity
 import com.xiangning.simplelauncher.retrofit.RetrofitServiceFactory
 import com.xiangning.simplelauncher.retrofit.get
-import com.xiangning.simplelauncher.utils.ShellUtils
 import com.xiangning.simplelauncher.utils.StatusBarHelper
-import io.reactivex.Observable
+import com.xiangning.simplelauncher.utils.asyncCommand
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_launcher.*
@@ -70,6 +69,9 @@ class Launcher : BaseActivity() {
 
                     // 息屏清除通知
                     NotificationService.instance?.cancelAll()
+
+                    // 清除后台
+                    asyncCommand("am kill-all")
                 }
             }
         }
@@ -106,13 +108,7 @@ class Launcher : BaseActivity() {
         }
 
         flashlight.setOnClickListener {
-            Observable.fromCallable {
-                ShellUtils.execCommand(
-                    "am start com.android.systemui/.flashlight.FlashlightActivity", true
-                )
-            }
-                .subscribeOn(Schedulers.io())
-                .subscribe()
+            asyncCommand("am start com.android.systemui/.flashlight.FlashlightActivity")
         }
 
         contacts.setOnClickListener { startActivity(Intent(this, Contacts::class.java)) }
@@ -124,11 +120,7 @@ class Launcher : BaseActivity() {
     }
 
     private fun screenOff() {
-        Observable.fromCallable {
-            ShellUtils.execCommand("input keyevent KEYCODE_POWER", true)
-        }
-            .subscribeOn(Schedulers.io())
-            .subscribe()
+        asyncCommand("input keyevent KEYCODE_POWER")
     }
 
     override fun onStart() {

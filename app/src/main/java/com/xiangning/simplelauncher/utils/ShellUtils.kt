@@ -1,5 +1,9 @@
 package com.xiangning.simplelauncher.utils
 
+import android.annotation.SuppressLint
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import java.io.BufferedReader
 import java.io.DataOutputStream
 import java.io.IOException
@@ -215,4 +219,16 @@ class ShellUtils private constructor() {
     init {
         throw AssertionError()
     }
+}
+
+@SuppressLint("CheckResult")
+fun asyncCommand(command: String, onResult: (ShellUtils.CommandResult) -> Unit = {}) {
+    Observable.fromCallable {
+        ShellUtils.execCommand(command, true)
+    }
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe {
+            onResult(it)
+        }
 }
