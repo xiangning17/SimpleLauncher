@@ -58,7 +58,7 @@ class Launcher : BaseActivity() {
         }
     }
 
-    private val screenReceiver = object : BroadcastReceiver() {
+    private val systemEventReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             when (intent?.action) {
                 Intent.ACTION_SCREEN_ON -> {
@@ -73,6 +73,10 @@ class Launcher : BaseActivity() {
                     // 清除后台
                     asyncCommand("am kill-all")
                 }
+                Intent.ACTION_CLOSE_SYSTEM_DIALOGS -> {
+                    // 关闭手电筒
+                    asyncCommand("settings put system flashlight_current_state 0")
+                }
             }
         }
 
@@ -85,9 +89,10 @@ class Launcher : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_launcher)
         startActivity(Intent(this, PermissionProxyActivity::class.java))
-        registerReceiver(screenReceiver, IntentFilter().apply {
+        registerReceiver(systemEventReceiver, IntentFilter().apply {
             addAction(Intent.ACTION_SCREEN_ON)
             addAction(Intent.ACTION_SCREEN_OFF)
+            addAction(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)
         })
 
         val sp = getSharedPreferences("default", Context.MODE_PRIVATE)
@@ -145,7 +150,7 @@ class Launcher : BaseActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        unregisterReceiver(screenReceiver)
+        unregisterReceiver(systemEventReceiver)
     }
 
     override fun onBackPressed() {
