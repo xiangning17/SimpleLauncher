@@ -250,7 +250,10 @@ class Launcher : BaseActivity() {
                     weather?.text = sb.toString()
                     mLastUpdateTime = System.currentTimeMillis()
                 }
-            }, { e -> Log.e(TAG, "getWeather: " + e.message, e) })
+            }, { e ->
+                Log.e(TAG, "getWeather: " + e.message, e)
+                weather?.text = "未获取到天气数据"
+            })
     }
 
     private fun extractTemp(raw: String) : String {
