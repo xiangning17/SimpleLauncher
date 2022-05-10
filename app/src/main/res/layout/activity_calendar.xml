@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:context=".ui.CalendarActivity">
+
+        <TextView
+            android:id="@+id/title_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:paddingVertical="6dp"
+            android:textColor="#000"
+            android:textSize="36dp"
+            android:textStyle="bold"
+            tools:text="2022年5月" />
+
+        <com.haibin.calendarview.CalendarView
+            android:id="@+id/calendar_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="4dp"
+            android:background="#fff"
+            app:calendar_height="72dp"
+            app:current_month_lunar_text_color="#B30808"
+            app:day_text_size="30dp"
+            app:lunar_text_size="20dp"
+            app:month_view="com.xiangning.simplelauncher.ui.CalendarMonthView"
+            app:month_view_auto_select_day="first_day_of_month"
+            app:month_view_show_mode="mode_only_current"
+            app:selected_theme_color="#2196F3"
+            app:week_bar_height="48dp"
+            app:week_line_background="#B22222"
+            app:week_start_with="mon"
+            app:week_text_color="#E91E63"
+            app:week_text_size="32dp" />
+
+        <TextView
+            android:id="@+id/tv_festival"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:textColor="#2196F3"
+            android:textSize="24dp"
+            android:textStyle="bold"
+            tools:text="端午节" />
+
+        <TextView
+            android:id="@+id/tv_lunar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:textColor="#B70505"
+            android:textSize="24dp"
+            android:textStyle="bold"
+            tools:text="五月初五" />
+
+        <TextView
+            android:id="@+id/tv_yiji"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:textColor="#27AEB3"
+            android:textSize="24dp"
+            android:textStyle="bold"
+            tools:text="宜忌：" />
+    </LinearLayout>
+</ScrollView>

@@ -112,6 +112,10 @@ class Launcher : BaseActivity() {
             return@setOnLongClickListener true
         }
 
+        date_container.setOnClickListener {
+            startActivity(Intent(this, CalendarActivity::class.java))
+        }
+
         flashlight.setOnClickListener {
             asyncCommand("am start com.android.systemui/.flashlight.FlashlightActivity")
         }

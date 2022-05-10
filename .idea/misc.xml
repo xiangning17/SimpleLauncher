@@ -12,6 +12,7 @@
         <entry key="app/src/main/res/drawable/progress_battery.xml" value="0.13240740740740742" />
         <entry key="app/src/main/res/drawable/selector_bg_lockscreen.xml" value="0.13240740740740742" />
         <entry key="app/src/main/res/drawable/selector_bg_red_rect.xml" value="0.13240740740740742" />
+        <entry key="app/src/main/res/layout/activity_calendar.xml" value="0.24670433145009416" />
         <entry key="app/src/main/res/layout/activity_launcher.xml" value="0.25" />
       </map>
     </option>
