@@ -1,10 +1,13 @@
 package com.xiangning.simplelauncher.calendar;
 
+import android.text.TextUtils;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 中国农历工具类-
@@ -205,15 +208,8 @@ public class LunarCalendar {
     }
 
     // ====== 传入 offset 传回干支, 0=甲子
-    final static public String cyclical(int year, int month, int day) {
+    final static public String cyclical(int year) {
         int num = year - 1900 + 36;
-        //立春日期
-        int term2 = sTerm(year, 2);
-        if (month > 2 || (month == 2 && day >= term2)) {
-            num = num + 0;
-        } else {
-            num = num - 1;
-        }
         return (cyclicalm(num));
     }
 
@@ -289,21 +285,16 @@ public class LunarCalendar {
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH) + 1;
         int day = calendar.get(Calendar.DATE);
+        return getLunarString(year, month, day, false);
+    }
 
+    public static String getLunarString(int year, int month, int day, boolean getTerms) {
         int var = getLunarDateINT(year, month, day);
         int lYear = (int) var / 10000;
         int lMonth = (int) (var % 10000) / 100;
         int lDay = var - lYear * 10000 - lMonth * 100;
 
-        int animalsYear = 0;
-        int term2 = sTerm(year, 2);//立春
-        if (month > 2 || (month == 2 && day >= term2)) {
-            animalsYear = year;
-        } else {
-            animalsYear = year - 1;
-        }
-
-        String lunY = cyclical(year, month, day) + animalsYear(animalsYear);
+        String lunY = cyclical(lYear) + animalsYear(lYear);
 
         String lunM = "";
         int testMonth = getSunDate(lYear, lMonth, lDay, false).get(Calendar.MONTH) + 1;
@@ -315,9 +306,17 @@ public class LunarCalendar {
         String lunD = getChinaDayString(lDay);
 
         String result = lunY + " " + lunM + lunD;
-        String festival = getFestival(year, month, day);
+        String festival = getLunarFestival(year, month, day);
         if (festival != null && festival.length() > 0) {
             result = result + " " + festival;
+        }
+
+        // 获取节气信息
+        if (getTerms) {
+            String term = getSolarTerms(year, month, day);
+            if (term != null && term.length() > 0) {
+                result = result + " " + term;
+            }
         }
         return result;
 //        return "农历 "+lunM+lunD+" "+Festival;
@@ -395,8 +394,31 @@ public class LunarCalendar {
     }
 
     public static String getFestival(int year, int month, int day) {//获取公历对应的节假日或二十四节气
+        List<String> festivals = new ArrayList<>(3);
 
         //农历节假日
+        String lunar = getLunarFestival(year, month, day);
+        if (!TextUtils.isEmpty(lunar)) {
+            festivals.add(lunar);
+        }
+
+        //公历节假日
+        String solar = getSolarHoliday(year, month, day);
+        if (!TextUtils.isEmpty(solar)) {
+            festivals.add(solar);
+        }
+
+        // 二十四节气
+        String terms = getSolarTerms(year, month, day);
+        if (!TextUtils.isEmpty(terms)) {
+            festivals.add(terms);
+        }
+
+        return TextUtils.join("\n", festivals);
+    }
+
+    // 农历节日
+    public static String getLunarFestival(int year, int month, int day) {
         int var = getLunarDateINT(year, month, day);
         int lun_year = (int) var / 10000;
         int lun_month = (int) (var % 10000) / 100;
@@ -420,42 +442,51 @@ public class LunarCalendar {
             }
         }
 
-        //公历节假日
-//        for (int i = 0; i < solarHoliday.length; i++) {
-//            if (i == solarHoliday.length && year < 1893 //1893年前没有此节日
-//                    || i + 3 == solarHoliday.length && year < 1999
-//                    || i + 6 == solarHoliday.length && year < 1942
-//                    || i + 10 == solarHoliday.length && year < 1949
-//                    || i == 19 && year < 1921
-//                    || i == 20 && year < 1933
-//                    || i == 22 && year < 1976) {
-//                break;
-//            }
-//            // 返回公历节假日名称
-//            String sd = solarHoliday[i].split(" ")[0]; // 节假日的日期
-//            String sdv = solarHoliday[i].split(" ")[1]; // 节假日的名称
-//            String smonth_v = month + "";
-//            String sday_v = day + "";
-//            String smd = "";
-//            if (month < 10) {
-//                smonth_v = "0" + month;
-//            }
-//            if (day < 10) {
-//                sday_v = "0" + day;
-//            }
-//            smd = smonth_v + sday_v;
-//            if (sd.trim().equals(smd.trim())) {
-//                return sdv;
-//            }
-//        }
+        return "";
+    }
 
+    // 公历节日
+    public static String getSolarHoliday(int year, int month, int day) {
+        for (int i = 0; i < solarHoliday.length; i++) {
+            if (i == solarHoliday.length && year < 1893 //1893年前没有此节日
+                    || i + 3 == solarHoliday.length && year < 1999
+                    || i + 6 == solarHoliday.length && year < 1942
+                    || i + 10 == solarHoliday.length && year < 1949
+                    || i == 19 && year < 1921
+                    || i == 20 && year < 1933
+                    || i == 22 && year < 1976) {
+                break;
+            }
+            // 返回公历节假日名称
+            String sd = solarHoliday[i].split(" ")[0]; // 节假日的日期
+            String sdv = solarHoliday[i].split(" ")[1]; // 节假日的名称
+            String smonth_v = month + "";
+            String sday_v = day + "";
+            String smd = "";
+            if (month < 10) {
+                smonth_v = "0" + month;
+            }
+            if (day < 10) {
+                sday_v = "0" + day;
+            }
+            smd = smonth_v + sday_v;
+            if (sd.trim().equals(smd.trim())) {
+                return sdv;
+            }
+        }
 
+        return "";
+    }
+
+    // 获取节气
+    public static String getSolarTerms(int year, int month, int day) {
         int b = getDateOfSolarTerms(year, month);
         if (day == (int) b / 100) {
             return sTermInfo[(month - 1) * 2];
         } else if (day == b % 100) {
             return sTermInfo[(month - 1) * 2 + 1];
         }
+
         return "";
     }
 
@@ -688,7 +719,10 @@ public class LunarCalendar {
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH) + 1;
         int day = calendar.get(Calendar.DATE);
+        return getyiji(year, month, day);
+    }
 
+    public static String getyiji(int year, int month, int day) {
         int num_y = -1;
         int num_m = (year - 1900) * 12 + month - 1 + 12;
         int num_d;
