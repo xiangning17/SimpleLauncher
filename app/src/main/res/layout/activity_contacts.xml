@@ -18,7 +18,7 @@
             android:gravity="center"
             android:text="打电话"
             android:textColor="@android:color/white"
-            android:textSize="42sp" />
+            android:textSize="42dp" />
 
         <ImageView
             android:id="@+id/add_contact"

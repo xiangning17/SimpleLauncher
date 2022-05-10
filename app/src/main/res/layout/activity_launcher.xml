@@ -26,7 +26,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:textSize="32sp"
+            android:textSize="32dp"
             android:textColor="@android:color/holo_red_dark"
             android:text="没电了！"/>
     </FrameLayout>
@@ -40,7 +40,7 @@
         android:gravity="center"
         android:text="上午 9:58"
         android:textColor="@android:color/white"
-        android:textSize="64sp"
+        android:textSize="64dp"
         android:textStyle="bold" />
 
 
@@ -60,7 +60,7 @@
             android:gravity="center"
             android:text="2020年01月01日"
             android:textColor="@android:color/white"
-            android:textSize="36sp"
+            android:textSize="36dp"
             android:textStyle="bold" />
 
         <TextView
@@ -71,7 +71,7 @@
             android:gravity="center"
             android:text="农历冬月二十三"
             android:textColor="@android:color/white"
-            android:textSize="36sp"
+            android:textSize="36dp"
             android:textStyle="bold" />
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -82,7 +82,7 @@
             android:gravity="center"
             tools:text="宜忌:"
             android:textColor="@android:color/white"
-            android:textSize="24sp"
+            android:textSize="24dp"
             android:textStyle="bold" />
 
     </LinearLayout>
@@ -105,7 +105,7 @@
             app:autoSizeTextType="uniform"
             tools:text="晴转多云  23度"
             android:textColor="@android:color/white"
-            android:textSize="56sp"
+            android:textSize="56dp"
             android:textStyle="bold" />
     </LinearLayout>
 
@@ -125,7 +125,7 @@
             android:gravity="center"
             android:text="手电筒"
             android:textColor="@android:color/white"
-            android:textSize="36sp"
+            android:textSize="36dp"
             android:textStyle="bold"/>
 
         <TextView
@@ -137,7 +137,7 @@
             android:gravity="center"
             android:text="打电话"
             android:textColor="@android:color/white"
-            android:textSize="36sp"
+            android:textSize="36dp"
             android:textStyle="bold"/>
 
         <TextView
@@ -149,7 +149,7 @@
             android:gravity="center"
             android:text="关屏幕"
             android:textColor="@android:color/white"
-            android:textSize="36sp"
+            android:textSize="36dp"
             android:textStyle="bold"/>
     </LinearLayout>
 
