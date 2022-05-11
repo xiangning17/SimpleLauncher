@@ -2,14 +2,19 @@ package com.xiangning.simplelauncher.ui
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.net.Uri
 import android.os.BatteryManager
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.text.SpannableStringBuilder
 import android.util.Log
+import android.widget.Toast
 import com.tbruyelle.rxpermissions2.RxPermissions
 import com.xiangning.simplelauncher.R
 import com.xiangning.simplelauncher.calendar.LunarCalendar
@@ -18,6 +23,7 @@ import com.xiangning.simplelauncher.notification.NotificationService
 import com.xiangning.simplelauncher.notification.PermissionProxyActivity
 import com.xiangning.simplelauncher.retrofit.RetrofitServiceFactory
 import com.xiangning.simplelauncher.retrofit.get
+import com.xiangning.simplelauncher.utils.KeyMonitor
 import com.xiangning.simplelauncher.utils.StatusBarHelper
 import com.xiangning.simplelauncher.utils.asyncCommand
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -126,6 +132,37 @@ class Launcher : BaseActivity() {
             screenOff()
         }
 
+        startKeyMonitor()
+
+    }
+
+    private fun startKeyMonitor() {
+        if (Build.VERSION.SDK_INT >= 23) {
+
+            if (!Settings.canDrawOverlays(this)) {
+                Toast.makeText(this, "请打开此应用悬浮窗权限-Shendi", Toast.LENGTH_SHORT).show();
+                startActivityForResult(
+                    Intent(
+                        Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                        Uri.parse("package:$packageName")
+                    ), 1234
+                )
+                return
+            }
+        }
+
+        KeyMonitor.start(this)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 1234) {
+            if (resultCode != Activity.RESULT_OK) {
+                Toast.makeText(this, "悬浮窗权限未授予", Toast.LENGTH_LONG).show()
+            } else {
+                KeyMonitor.start(this)
+            }
+        }
     }
 
     private fun screenOff() {
